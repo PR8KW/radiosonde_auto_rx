@@ -111,7 +111,8 @@ class EmailNotification(object):
                 msg += '\n'
                 msg += 'http://%s:5000\n' % IPAddr
                 msg += '\n'
-                msg += 'https://tracker.habhub.org/#!qm=All&q=RS_%s\n' % _id
+                #msg += 'https://tracker.habhub.org/#!qm=All&q=RS_%s\n' % _id
+                msg += 'https://sondehub.org/%s\n' % _id
 
                 msg = MIMEText(msg, 'plain', 'UTF-8')
                 msg['Subject'] = 'Sonde launch detected: ' + _id
