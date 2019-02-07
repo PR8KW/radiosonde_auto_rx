@@ -227,8 +227,8 @@ to = someone@example.com
 # See www.pushover.net for details.
 [pushover]
 pushover_enabled = False
-app_token = PUSHOVER_APP_TOKEN
-user = PUSHOVER_USER_KEY
+pushover_app_token = PUSHOVER_APP_TOKEN
+pushover_user_key = PUSHOVER_USER_KEY
 
 ###################
 # ROTATOR CONTROL #
