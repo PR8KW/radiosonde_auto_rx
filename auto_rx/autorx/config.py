@@ -45,6 +45,10 @@ def read_auto_rx_config(filename):
                 'email_smtp_server': 'localhost',
                 'email_from': 'sonde@localhost',
                 'email_to': None,
+                # Pushover Settings
+                'pushover_enabled' : False,
+                'pushover_app_token' : None,
+                'pushover_user_key' : None,
 		# SDR Settings
 		'sdr_fm': 'rtl_fm',
 		'sdr_power': 'rtl_power',
@@ -135,6 +139,16 @@ def read_auto_rx_config(filename):
 			except:
 				logging.error("Config - Invalid email settings. Disabling.")
 				auto_rx_config['email_enabled'] = False
+
+                # Pushover Settings
+		if config.has_option('pushover', 'pushover_enabled'):
+			try:
+				auto_rx_config['pushover_enabled'] = config.getboolean('pushover', 'pushover_enabled')
+				auto_rx_config['pushover_app_token'] = config.get('pushover', 'pushover_app_token')
+				auto_rx_config['pushover_user_key'] = config.get('pushover', 'pushover_user_key')
+			except:
+				logging.error("Config - Invalid pushover settings. Disabling.")
+				auto_rx_config['pushover_enabled'] = False
 
 		# SDR Settings
 		auto_rx_config['sdr_fm'] = config.get('advanced', 'sdr_fm_path')
