@@ -220,7 +220,15 @@ smtp_server = localhost
 from = sonde@localhost
 to = someone@example.com
 
-
+##########################
+# PUSHOVER NOTIFICATIONS #
+##########################
+# Sends a Pushover notification to the specified account when a new Sonde is detected
+# See www.pushover.net for details.
+[pushover]
+pushover_enabled = False
+app_token = PUSHOVER_APP_TOKEN
+user = PUSHOVER_USER_KEY
 
 ###################
 # ROTATOR CONTROL #
