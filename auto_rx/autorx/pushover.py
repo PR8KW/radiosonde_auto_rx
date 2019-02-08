@@ -8,7 +8,7 @@
 import logging
 import time
 import socket
-import http.client, urllib
+import httplib, urllib
 from threading import Thread
 
 try:
@@ -31,7 +31,7 @@ class PushoverNotification(object):
     # We require the following fields to be present in the input telemetry dict.
     REQUIRED_FIELDS = [ 'id', 'lat', 'lon', 'alt', 'type', 'freq']
 
-    def __init__(self, app_token = None, user_key = None):
+    def __init__(self,  app_token = "undefined", user_key = "nondefined"):
         """ Init a new Pushover Notification Thread """
         self.app_token = app_token
         self.user_key = user_key
@@ -49,6 +49,8 @@ class PushoverNotification(object):
 
         self.log_info("Started Pushover Notifier Thread")
 
+    # Uncomment the next line to check Pushover configuration
+    # self.log_info("Started Pushover Notifier Thread AT: %s UK: %s" % (self.app_token,self.user_key))
 
     def add(self, telemetry):
         """ Add a telemetery dictionary to the input queue. """
@@ -110,12 +112,12 @@ class PushoverNotification(object):
                 msg += '\n'
                 msg += 'https://sondehub.org/%s\n' % _id
 
-                conn = http.client.HTTPSConnection("api.pushover.net:443")
+                conn = httplib.HTTPSConnection("api.pushover.net:443")
                 conn.request("POST", "/1/messages.json",
-                    urllib.parse.urlencode({
+                    urllib.urlencode({
                     "token": self.app_token,
                     "user": self.user_key,
-                    "message": msg.as_string(),
+                    "message": msg,
                     }), { "Content-type": "application/x-www-form-urlencoded" })
                 conn.getresponse()
 
