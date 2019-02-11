@@ -451,7 +451,12 @@ def main():
     if config['pushover_enabled']:
         _pushover_notification = PushoverNotification(
             app_token = config['pushover_app_token'],
-            user_key = config['pushover_user_key']
+            user_key = config['pushover_user_key'],
+            landing_lat1 = config['pushover_landing_lat1'],
+            landing_lon1 = config['pushover_landing_lon1'],
+            landing_alt1 = config['pushover_landing_alt1'],
+            landing_distance1 = config['pushover_landing_distance1'],
+            landing_altitude1 = config['pushover_landing_altitude1']
 	)
 
         exporter_objects.append(_pushover_notification)

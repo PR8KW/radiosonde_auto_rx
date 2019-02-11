@@ -229,6 +229,17 @@ to = someone@example.com
 pushover_enabled = False
 pushover_app_token = PUSHOVER_APP_TOKEN
 pushover_user_key = PUSHOVER_USER_KEY
+# Define a location so that a pushover notification is sent when the balloon is descending and
+# is within desired range and altitude of this location.  One location currently.  Additional locs to be added later.
+[pushover_landing]
+pushover_landing_enabled = False
+# The location to watch
+pushover_landing_lat1 = 0.0
+pushover_landing_lon1 = 0.0
+pushover_landing_alt1 = 0.0
+# Only get a notification when the balloon is within this range and this altitude
+pushover_landing_distance1 = 5.0
+pushover_landing_altitude1 = 5.0
 
 ###################
 # ROTATOR CONTROL #

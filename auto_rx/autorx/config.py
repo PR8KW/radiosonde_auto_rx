@@ -40,15 +40,22 @@ def read_auto_rx_config(filename):
 	auto_rx_config = {
 		# Log Settings
 		'per_sonde_log' : True,
-                # Email Settings
-                'email_enabled': False,
-                'email_smtp_server': 'localhost',
-                'email_from': 'sonde@localhost',
-                'email_to': None,
-                # Pushover Settings
-                'pushover_enabled' : False,
-                'pushover_app_token' : None,
-                'pushover_user_key' : None,
+        # Email Settings
+        'email_enabled': False,
+        'email_smtp_server': 'localhost',
+        'email_from': 'sonde@localhost',
+        'email_to': None,
+        # Pushover Settings
+        'pushover_enabled' : False,
+        'pushover_app_token' : None,
+        'pushover_user_key' : None,
+		# Pushover Landing Settings
+		'pushover_landing_enabled' : False,
+		'pushover_landing_lat1' : 0.0,
+		'pushover_landing_lon1' : 0.0,
+		'pushover_landing_alt1' : 0.0,
+		'pushover_landing_distance1' : 0.0,
+		'pushover_landing_altitude1' : 0.0,
 		# SDR Settings
 		'sdr_fm': 'rtl_fm',
 		'sdr_power': 'rtl_power',
@@ -149,6 +156,18 @@ def read_auto_rx_config(filename):
 			except:
 				logging.error("Config - Invalid pushover settings. Disabling.")
 				auto_rx_config['pushover_enabled'] = False
+
+		if config.has_option('pushover_landing', 'pushover_landing_enabled'):
+			try:
+				auto_rx_config['pushover_landing_enabled'] = config.getboolean('pushover_landing', 'pushover_landing_enabled')
+				auto_rx_config['pushover_landing_lat1'] = config.getfloat('pushover_landing', 'pushover_landing_lat1')
+				auto_rx_config['pushover_landing_lon1'] = config.getfloat('pushover_landing', 'pushover_landing_lon1')
+				auto_rx_config['pushover_landing_alt1'] = config.getfloat('pushover_landing', 'pushover_landing_alt1')
+				auto_rx_config['pushover_landing_distance1'] = config.getfloat('pushover_landing', 'pushover_landing_distance1')
+				auto_rx_config['pushover_landing_altitude1'] = config.getfloat('pushover_landing', 'pushover_landing_altitude1')
+			except:
+				logging.error("Config - Invalid pushover landing settings. Disabling.")
+				auto_rx_config['pushover_landing_enabled'] = False
 
 		# SDR Settings
 		auto_rx_config['sdr_fm'] = config.get('advanced', 'sdr_fm_path')
