@@ -150,9 +150,9 @@ class PushoverNotification(object):
                     # Calculate using positon_info function from rotator_utils.py
                     _info = position_info(_listener, _payload)
 
-                    if (_info['straight_distance'] < self.landing_distance1 * 1000) and (telemetry['alt'] < self.landing_altitude1 * 1000) and (telemetry['vel_h'] < 0):
+                    self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telemetry['alt'], telemetry['vel_h']))
 
-                        #self.log_info("Sonde falling:  %dm, %dm, %dkm/h" % )
+                    if (_info['straight_distance'] < self.landing_distance1) and (telemetry['alt'] < self.landing_altitude1) and (telemetry['vel_h'] < 0):
 
                         IPAddr = self.get_ip_address()
 
