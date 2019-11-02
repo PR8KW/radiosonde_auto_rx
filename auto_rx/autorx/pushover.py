@@ -140,7 +140,7 @@ class PushoverNotification(object):
             try:
                 # This is an existing sonde.  Send a single notification if it is falling
                 # and is within the range specified.
-
+		# self.log_info("geofence:  %.5f,%.5f" % (self.landing_lat1, self.landing_lon1))
                 if self.landing_lat1 != 0.0 and self.landing_lon1 != 0.0:
 
                     # Calculate the distance from the desired position to the payload.
@@ -150,9 +150,9 @@ class PushoverNotification(object):
                     # Calculate using positon_info function from rotator_utils.py
                     _info = position_info(_listener, _payload)
 
-                    self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telemetry['alt'], telemetry['vel_h']))
+                    # self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telemetry['alt'], telemetry['vel_h']))
 
-                    if (_info['straight_distance'] < self.landing_distance1) and (telemetry['alt'] < self.landing_altitude1) and (telemetry['vel_h'] < 0):
+                    if (_info['straight_distance'] < self.landing_distance1) and (telemetry['alt'] < self.landing_altitude1) and (telemetry['vel_v'] < 0):
 
                         IPAddr = self.get_ip_address()
 
