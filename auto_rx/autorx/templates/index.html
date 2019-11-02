@@ -182,6 +182,7 @@
                     {title:"Longitude", field:"lon", headerSort:false},
                     {title:"Alt (m)", field:"alt", headerSort:false},
                     {title:"Asc (m/s)", field:"vel_v", headerSort:false},
+                    {title:"GS (km/h)", field:"vel_h", headerSort:false},
                     {title:"Temp (°C)", field:"temp", headerSort:false},
                     {title:"RH (%)", field:"humidity", headerSort:false},
                     {title:"Az (°)", field:"azimuth", headerSort:false},
@@ -190,7 +191,7 @@
                     {title:"SNR (dB)", field:"snr", headerSort:false, visible:false},
                     {title:"Other", field:"other", headerSort:false}
                 ]
-            });
+           });
 
             function updateTelemetryTable(){
                 var telem_data = [];
@@ -234,6 +235,7 @@
                         sonde_id_data.lon = sonde_id_data.lon.toFixed(5);
                         sonde_id_data.alt = sonde_id_data.alt.toFixed(1);
                         sonde_id_data.vel_v = sonde_id_data.vel_v.toFixed(1);
+                        sonde_id_data.vel_h = (sonde_id_data.vel_h*3.6).toFixed(1);
                         // Add a link to HabHub if we have habitat enabled.
                         if ("habitat_enabled" in autorx_config){
                             if(autorx_config.habitat_enabled ==true){

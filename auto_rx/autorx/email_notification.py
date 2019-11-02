@@ -9,6 +9,7 @@ import datetime
 import logging
 import time
 import smtplib
+import socket
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from threading import Thread
@@ -92,6 +93,12 @@ class EmailNotification(object):
             # Sleep while waiting for some new data.
             time.sleep(0.5)
 
+    def get_ip_address(self):
+    	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.connect(("1.1.1.1", 80))
+	return s.getsockname()[0]
+
+
 
     def process_telemetry(self, telemetry):
         """ Process a new telemmetry dict, and send an e-mail if it is a new sonde. """
@@ -100,6 +107,9 @@ class EmailNotification(object):
         if _id not in self.sondes:
             try:
                 # This is a new sonde. Send the email.
+
+                IPAddr = self.get_ip_address()
+
                 msg  = 'Sonde launch detected:\n'
                 msg += '\n'
 
@@ -117,6 +127,8 @@ class EmailNotification(object):
                     msg += 'Range:     %.1f km\n' % (_relative_position['straight_distance']/1000.0)
                     msg += 'Bearing:   %d degrees True\n' % int(_relative_position['bearing'])
 
+                msg += '\n'
+                msg += 'http://%s:5000\n' % IPAddr
                 msg += '\n'
                 #msg += 'https://tracker.habhub.org/#!qm=All&q=RS_%s\n' % _id
                 msg += 'https://sondehub.org/%s\n' % _id
