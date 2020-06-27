@@ -618,7 +618,7 @@ def main():
         exporter_functions.append(_pushover_notification.add)
 	
     if config['telegram_enabled']:
-        _pushover_notification = PushoverNotification(
+        _telegram_notification = TelegramNotification(
             bot_token = config['telegram_bot_token'],
             chat_id = config['telegram_chat_id'],
             landing_lat1 = config['telegram_landing_lat1'],
