@@ -22,7 +22,7 @@ except ImportError:
     from queue import Queue
 
 
-class PushoverNotification(object):
+class TelegramNotification(object):
     """ Radiosonde Telegram Notification Class.
 
     Accepts telemetry dictionaries from a decoder, and sends a Telegram Notification on newly detected sondes.
