@@ -22,6 +22,7 @@ from autorx.scan import SondeScanner
 from autorx.decode import SondeDecoder, VALID_SONDE_TYPES, DRIFTY_SONDE_TYPES
 from autorx.logger import TelemetryLogger
 from autorx.email_notification import EmailNotification
+from autorx.pushover import PushoverNotification
 from autorx.habitat import HabitatUploader
 from autorx.aprs import APRSUploader
 from autorx.ozimux import OziUploader
@@ -600,6 +601,20 @@ def main():
         _logger = TelemetryLogger(log_directory=logging_path)
         exporter_objects.append(_logger)
         exporter_functions.append(_logger.add)
+
+    if config['pushover_enabled']:
+        _pushover_notification = PushoverNotification(
+            app_token = config['pushover_app_token'],
+            user_key = config['pushover_user_key'],
+            landing_lat1 = config['pushover_landing_lat1'],
+            landing_lon1 = config['pushover_landing_lon1'],
+            landing_alt1 = config['pushover_landing_alt1'],
+            landing_distance1 = config['pushover_landing_distance1'],
+            landing_altitude1 = config['pushover_landing_altitude1']
+	)
+
+        exporter_objects.append(_pushover_notification)
+        exporter_functions.append(_pushover_notification.add)
 
     if config['email_enabled']:
 
