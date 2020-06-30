@@ -116,7 +116,7 @@ class TelegramNotification(object):
                 msg += 'Position:  %.5f,%.5f\n' % (telemetry['lat'], telemetry['lon'])
                 msg += 'Altitude:  %dm\n' % round(telemetry['alt'])
                 msg += '\n'
-                msg += 'https://aprs.fi/info/a/%s\n' % _id
+                msg += 'https://aprs.fi/#!call=a/%s\n' % _id
                 msg += '\n'
                 msg += 'https://sondehub.org/%s\n' % _id
 
@@ -165,7 +165,7 @@ class TelegramNotification(object):
                         msg += 'Range:     %dm\n' % _info['straight_distance']
                         msg += 'Altitude:  %dm\n' % round(telemetry['alt'])
                         msg += '\n'
-                        msg += 'https://aprs.fi/info/a/%s\n' % _id
+                        msg += 'https://aprs.fi/#!call=a/%s\n' % _id
                         msg += '\n'
                         msg += 'https://sondehub.org/%s\n' % _id
 
