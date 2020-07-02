@@ -125,6 +125,7 @@ class TelegramNotification(object):
                     urllib.urlencode({
                     "chat_id": self.chat_id,
                     "text": msg,
+		    "disable_web_page_preview": True,
                     }), { "Content-type": "application/x-www-form-urlencoded" })
                 conn.getresponse()
 
@@ -174,6 +175,7 @@ class TelegramNotification(object):
                             urllib.urlencode({
                             "chat_id": self.chat_id,
                             "text": msg,
+			    "disable_web_page_preview": True,
                             }), {"Content-type": "application/x-www-form-urlencoded"})
                         conn.getresponse()
 
