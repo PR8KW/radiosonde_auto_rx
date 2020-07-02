@@ -282,9 +282,9 @@ pushover_landing_enabled = False
 pushover_landing_lat1 = 0.0
 pushover_landing_lon1 = 0.0
 pushover_landing_alt1 = 0.0
-# Only get a notification when the balloon is within this range and this altitude
-pushover_landing_distance1 = 5.0
-pushover_landing_altitude1 = 5.0
+# Only get a notification when the balloon is within this range and this altitude. Distance and altitude in meters.
+pushover_landing_distance1 = 30000
+pushover_landing_altitude1 = 2000
 
 ##########################
 # TELEGRAM NOTIFICATIONS #
@@ -303,9 +303,9 @@ telegram_landing_enabled = False
 telegram_landing_lat1 = 0.0
 telegram_landing_lon1 = 0.0
 telegram_landing_alt1 = 0.0
-# Only get a notification when the balloon is within this range and this altitude
-telegram_landing_distance1 = 5.0
-telegram_landing_altitude1 = 5.0
+# Only get a notification when the balloon is within this range and this altitude. Distance and altitude in meters.
+telegram_landing_distance1 = 30000
+telegram_landing_altitude1 = 2000
 
 ###################
 # ROTATOR CONTROL #
