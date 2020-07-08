@@ -302,7 +302,7 @@ if __name__ == "__main__":
         landing_alt1 = 0,
         landing_distance1 = 10000,
         landing_altitude1 = 5000,
-        timeout = 10,
+        timeout = 0,
     )
 
     # Wait a second..
@@ -312,6 +312,6 @@ if __name__ == "__main__":
     _telegram_notification.add({'id':'R1234567', 'frame':10, 'lat':-10.0, 'lon':10.0, 'alt':4999, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
 
     # Wait a little bit before shutting down.
-    time.sleep(20)
+    time.sleep(5)
     _telegram_notification.close()
 
