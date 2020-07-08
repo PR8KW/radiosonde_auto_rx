@@ -336,6 +336,11 @@ if __name__ == "__main__":
 
     _telegram_notification.add({'id':'R1234567', 'frame':30, 'lat':-10.011, 'lon':10.011, 'alt':1000, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
     # Wait a little bit before shutting down.
+
+    time.sleep(15)
+
+    _telegram_notification.add({'id':'R1234567', 'frame':40, 'lat':-10.012, 'lon':10.012, 'alt':700, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
+
     time.sleep(20)
     _telegram_notification.close()
 
