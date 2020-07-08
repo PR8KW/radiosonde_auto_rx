@@ -110,13 +110,9 @@ class TelegramNotification(object):
         """ Process a new telemmetry dict, and send an notification if it is a new sonde. """
         global telegram_telemetry_store
         _id = telemetry['id']
+        telegram_telemetry_store = telemetry.copy()
+        telegram_telemetry_store[_id] = {'last_time':time.time()}
 
-        if _id not in telegram_telemetry_store:
-            telegram_telemetry_store[_id] = {'timestamp':time.time(), 'latest_telem':telemetry}
-
-        telegram_telemetry_store[_id]['latest_telem'] = telemetry
-        telegram_telemetry_store[_id]['timestamp'] = time.time()
-		
         if _id not in self.sondes:
             try:
                 # This is a new sonde. Send the notification.
@@ -205,56 +201,55 @@ class TelegramNotification(object):
         global telegram_telemetry_store
 		
         _now = time.time()
-        _telem_ids = list(telegram_telemetry_store.keys())
+        telemetry = telegram_telemetry_store.copy()
+        _id = telemetry['id']
+        if (_id not in self.sondes_landing_lost) and (_id in self.sondes_landing) :
+            try:
+            # This is an existing sonde with falling region notification.  
+            # Send a single notification when rx timeout.
 
-        for _id in _telem_ids:
-            if (_id not in self.sondes_landing_lost) and (_id in self.sondes_landing) :
-                try:
-                # This is an existing sonde with falling region notification.  
-                # Send a single notification when rx timeout.
+                if (_now - telemetry['last_time']) > self.timeout:
+                    # Calculate the distance from the desired position to the payload.
+                    _listener = (self.landing_lat1, self.landing_lon1, self.landing_alt1)
+                    _payload = (telemetry['lat'], telemetry['lon'], telemetry['alt'])
 
-                    if (_now - telegram_telemetry_store[_id]['timestamp']) > self.timeout:
-                        # Calculate the distance from the desired position to the payload.
-                        _listener = (self.landing_lat1, self.landing_lon1, self.landing_alt1)
-                        _payload = (telegram_telemetry_store[_id]['lat'], telegram_telemetry_store[_id]['lon'], telegram_telemetry_store[_id]['alt'])
+                    # Calculate using positon_info function from rotator_utils.py
+                    _info = position_info(_listener, _payload)
 
-                        # Calculate using positon_info function from rotator_utils.py
-                        _info = position_info(_listener, _payload)
+                    self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telemetry['alt'], telemetry['vel_h']))
 
-                        self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telegram_telemetry_store[_id]['alt'], telegram_telemetry_store[_id]['vel_h']))
+                    # if (_info['straight_distance'] < self.landing_distance1) and (telemetry['alt'] < self.landing_altitude1) and (telemetry['vel_v'] < 0):
 
-                        # if (_info['straight_distance'] < self.landing_distance1) and (telegram_telemetry_store[_id]['alt'] < self.landing_altitude1) and (telegram_telemetry_store[_id]['vel_v'] < 0):
+                    IPAddr = self.get_ip_address()
 
-                        IPAddr = self.get_ip_address()
+                    msg = 'Sonde lost RX near position 1:\n'
+                    msg += '\n'
+                    msg += 'Callsign:  %s\n' % _id
+                    msg += 'Type:      %s\n' % telemetry['type']
+                    msg += 'Frequency: %s\n' % telemetry['freq']
+                    msg += 'Position:  %.5f,%.5f\n' % (telemetry['lat'], telemetry['lon'])
+                    msg += '\n'
+                    msg += 'Range:     %dm\n' % _info['straight_distance']
+                    msg += 'Altitude:  %dm\n' % round(telemetry['alt'])
+                    msg += '\n'
+                    msg += 'https://aprs.fi/#!call=a/%s\n' % _id
+                    msg += '\n'
+                    msg += 'https://sondehub.org/%s\n' % _id
 
-                        msg = 'Sonde lost RX near position 1:\n'
-                        msg += '\n'
-                        msg += 'Callsign:  %s\n' % _id
-                        msg += 'Type:      %s\n' % telegram_telemetry_store[_id]['type']
-                        msg += 'Frequency: %s\n' % telegram_telemetry_store[_id]['freq']
-                        msg += 'Position:  %.5f,%.5f\n' % (telegram_telemetry_store[_id]['lat'], telegram_telemetry_store[_id]['lon'])
-                        msg += '\n'
-                        msg += 'Range:     %dm\n' % _info['straight_distance']
-                        msg += 'Altitude:  %dm\n' % round(telegram_telemetry_store[_id]['alt'])
-                        msg += '\n'
-                        msg += 'https://aprs.fi/#!call=a/%s\n' % _id
-                        msg += '\n'
-                        msg += 'https://sondehub.org/%s\n' % _id
+                    conn = httplib.HTTPSConnection("api.telegram.org:443")
+                    conn.request("POST", "/bot%s/sendMessage" % self.bot_token,
+                        urllib.urlencode({
+                        "chat_id": self.chat_id,
+                        "text": msg,
+                        "disable_web_page_preview": True,
+                        }), {"Content-type": "application/x-www-form-urlencoded"})
+                    conn.getresponse()
 
-                        conn = httplib.HTTPSConnection("api.telegram.org:443")
-                        conn.request("POST", "/bot%s/sendMessage" % self.bot_token,
-                            urllib.urlencode({
-                            "chat_id": self.chat_id,
-                            "text": msg,
-                            "disable_web_page_preview": True,
-                            }), {"Content-type": "application/x-www-form-urlencoded"})
-                        conn.getresponse()
+                    self.log_info("Telegram Notification sent.")
+                    self.sondes_landing_lost[_id] = {'last_time': time.time()}
 
-                        self.log_info("Telegram Notification sent.")
-                        self.sondes_landing_lost[_id] = {'last_time': time.time()}
-
-                except Exception as e:
-                    self.log_error("Error sending Telegram Notification - %s" % str(e))
+            except Exception as e:
+                self.log_error("Error sending Telegram Notification - %s" % str(e))
 
 
 
