@@ -5,13 +5,15 @@
 #   Based on email_notification.py Copyright (C) 2018 Philip Heron <phil@sanslogic.co.uk>
 #   Released under GNU GPL v3 or later
 
+import datetime
 import logging
 import time
 import socket
 import httplib, urllib
 
 from threading import Thread
-from autorx.utils import position_info
+from .utils import position_info
+from .config import read_auto_rx_config
 
 try:
     # Python 2
@@ -232,6 +234,31 @@ class TelegramNotification(object):
 
 
 if __name__ == "__main__":
-    # Test Script
-    pass
+    # Test Script - Send an example telegram launch and landing detection, using the settings in station.cfg
+
+    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
+    
+    # Read in the station config, which contains the email settings.
+    config = read_auto_rx_config('station.cfg', no_sdr_test=True)
+
+    # Start up an telegram notifification object.
+    _telegram_notification = TelegramNotification(
+	    bot_token = config['telegram_bot_token'],
+        chat_id = config['telegram_chat_id'],
+        landing_lat1 = -10.01,
+        landing_lon1 = 10.01,
+        landing_alt1 = 0,
+        landing_distance1 = 5000,
+        landing_altitude1 = 5000,        
+    )
+
+    # Wait a second..
+    time.sleep(1)
+
+    # Add in a packet of telemetry, which will cause the email notifier to send an email.
+    _telegram_notification.add({'id':'R1234567', 'frame':10, 'lat':-10.0, 'lon':10.0, 'alt':4999, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
+
+    # Wait a little bit before shutting down.
+    time.sleep(5)
+    _email_notification.close()
 
