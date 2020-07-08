@@ -205,7 +205,7 @@ class TelegramNotification(object):
         global telegram_telemetry_store
 		
         _now = time.time()
-        _telem_ids = list(telemetry_telemetry_store.keys())
+        _telem_ids = list(telegram_telemetry_store.keys())
 
         for _id in _telem_ids:
             if (_id not in self.sondes_landing_lost) and (_id in self.sondes_landing) :
