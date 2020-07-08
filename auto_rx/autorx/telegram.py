@@ -145,10 +145,10 @@ class TelegramNotification(object):
                     }), { "Content-type": "application/x-www-form-urlencoded" })
                 conn.getresponse()
 
-                self.log_info("Telegram Notification sent.")
+                self.log_info("Telegram Detection Notification sent.")
                 
             except Exception as e:
-                self.log_error("Error sending Telegram Notification - %s" % str(e))
+                self.log_error("Error sending Telegram Detection Notification - %s" % str(e))
 
         self.sondes[_id] = { 'last_time': time.time() }
 
@@ -195,11 +195,11 @@ class TelegramNotification(object):
                             }), {"Content-type": "application/x-www-form-urlencoded"})
                         conn.getresponse()
 
-                        self.log_info("Telegram Notification sent.")
+                        self.log_info("Telegram Landing Notification sent.")
                         self.sondes_landing[_id] = {'last_time': time.time()}
 
             except Exception as e:
-                self.log_error("Error sending Telegram Notification - %s" % str(e))
+                self.log_error("Error sending Telegram Landing Notification - %s" % str(e))
 
     def process_lost(self):
         """ Send Last sonde position when rx timeout, if on landing notification. """
@@ -251,11 +251,11 @@ class TelegramNotification(object):
                             }), {"Content-type": "application/x-www-form-urlencoded"})
                         conn.getresponse()
 
-                        self.log_info("Telegram Notification sent.")
+                        self.log_info("Telegram Rx Lost Notification sent.")
                         self.sondes_landing_lost[_id] = {'last_time': time.time()}
 
                 except Exception as e:
-                    self.log_error("Error sending Telegram Notification - %s" % str(e))
+                    self.log_error("Error sending Telegram Rx Lost Notification - %s" % str(e))
 
 
 
@@ -334,15 +334,15 @@ if __name__ == "__main__":
 
     time.sleep(3)
 
-    _telegram_notification.add({'id':'R7654321', 'frame':15, 'lat':-10.001, 'lon':10.001, 'alt':5500, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
+    _telegram_notification.add({'id':'R7654321', 'frame':15, 'lat':-10.001, 'lon':10.001, 'alt':5500, 'temp':1.0, 'type':'RS41', 'freq':'403.000 MHz', 'freq_float':403.00, 'heading':0.0, 'vel_h':6.1, 'vel_v':-4.0, 'datetime_dt':datetime.datetime.utcnow()})
 
     time.sleep(3)
 
-    _telegram_notification.add({'id':'R7654321', 'frame':25, 'lat':-10.006, 'lon':10.006, 'alt':4500, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
+    _telegram_notification.add({'id':'R7654321', 'frame':25, 'lat':-10.006, 'lon':10.006, 'alt':4500, 'temp':1.0, 'type':'RS41', 'freq':'403.000 MHz', 'freq_float':403.00, 'heading':0.0, 'vel_h':6.1, 'vel_v':-4.0, 'datetime_dt':datetime.datetime.utcnow()})
 	
     time.sleep(3)
 
-    _telegram_notification.add({'id':'R7654321', 'frame':35, 'lat':-10.007, 'lon':10.007, 'alt':1500, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
+    _telegram_notification.add({'id':'R7654321', 'frame':35, 'lat':-10.007, 'lon':10.007, 'alt':1500, 'temp':1.0, 'type':'RS41', 'freq':'403.000 MHz', 'freq_float':403.00, 'heading':0.0, 'vel_h':6.1, 'vel_v':-4.0, 'datetime_dt':datetime.datetime.utcnow()})
 
     time.sleep(3)
 
