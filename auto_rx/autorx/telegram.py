@@ -92,6 +92,8 @@ class TelegramNotification(object):
                 except Exception as e:
                     self.log_error("Error processing telemetry dict - %s" % str(e))
 
+            # Send last RX position 
+            self.process_lost()
             # Sleep while waiting for some new data.
             time.sleep(0.5)
 
@@ -189,12 +191,15 @@ class TelegramNotification(object):
             except Exception as e:
                 self.log_error("Error sending Telegram Notification - %s" % str(e))
 
+    def process_lost(self):
+        """ Send Last sonde position when rx timeout, if on landing notification. """
+
         _now = time.time()
 		
         if (_id not in self.sondes_landing_lost) and (_id in self.sondes_landing) :
             try:
                 # This is an existing sonde with falling region notification.  
-				# Send a single notification when rx timeout.
+                # Send a single notification when rx timeout.
 
                 if _now > (self.sondes[_id]['last_time'] + self.timeout):
 				
@@ -302,7 +307,7 @@ if __name__ == "__main__":
         landing_alt1 = 0,
         landing_distance1 = 10000,
         landing_altitude1 = 5000,
-        timeout = 0,
+        timeout = 10,
     )
 
     # Wait a second..
@@ -312,6 +317,6 @@ if __name__ == "__main__":
     _telegram_notification.add({'id':'R1234567', 'frame':10, 'lat':-10.0, 'lon':10.0, 'alt':4999, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
 
     # Wait a little bit before shutting down.
-    time.sleep(5)
+    time.sleep(20)
     _telegram_notification.close()
 
