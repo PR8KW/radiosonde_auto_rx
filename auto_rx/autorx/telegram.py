@@ -191,7 +191,7 @@ class TelegramNotification(object):
             except Exception as e:
                 self.log_error("Error sending Telegram Notification - %s" % str(e))
 
-    def process_lost(self):
+    def process_lost(self, telemetry):
         """ Send Last sonde position when rx timeout, if on landing notification. """
 
         _now = time.time()
