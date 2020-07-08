@@ -255,8 +255,8 @@ class TelegramNotification(object):
                         conn.request("POST", "/bot%s/sendLocation" % self.bot_token,
                             urllib.urlencode({
                             "chat_id": self.chat_id,
-                            "latitude": lat,
-                            "longitude": lon,
+                            "latitude": telemetry['lat'],
+                            "longitude": telemetry['lon'],
                             }), {"Content-type": "application/x-www-form-urlencoded"})
                         conn.getresponse()
 
