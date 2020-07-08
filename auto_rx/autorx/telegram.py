@@ -35,7 +35,7 @@ class TelegramNotification(object):
     # We require the following fields to be present in the input telemetry dict.
     REQUIRED_FIELDS = [ 'id', 'lat', 'lon', 'alt', 'type', 'freq']
 
-    def __init__(self,  bot_token = "undefined", chat_id = "undefined", landing_lat1 = 0.0, landing_lon1 = 0.0, landing_alt1 = 0.0, landing_distance1 = 5.0, landing_altitude1 = 5.0):
+    def __init__(self,  bot_token = "undefined", chat_id = "undefined", landing_lat1 = 0.0, landing_lon1 = 0.0, landing_alt1 = 0.0, landing_distance1 = 5.0, landing_altitude1 = 5.0, timeout = 0):
         """ Init a new Telegram Notification Thread """
         self.bot_token = bot_token
         self.chat_id = chat_id
@@ -44,10 +44,12 @@ class TelegramNotification(object):
         self.landing_alt1 = landing_alt1
         self.landing_distance1 = landing_distance1
         self.landing_altitude1 = landing_altitude1
+		self.timeout = timeout
         
         # Dictionary to track sonde IDs
         self.sondes = {}
         self.sondes_landing = {}
+        self.sondes_landing_lost = {}
 
         # Input Queue.
         self.input_queue = Queue()
@@ -187,6 +189,56 @@ class TelegramNotification(object):
             except Exception as e:
                 self.log_error("Error sending Telegram Notification - %s" % str(e))
 
+        _now = time.time()
+		
+        if (_id not in self.sondes_landing_lost) and (_id in self.sondes_landing) :
+            try:
+                # This is an existing sonde with falling region notification.  
+				# Send a single notification when rx timeout.
+
+                if _now > (self.sondes[_id]['last_time'] + self.timeout):
+				
+                    # Calculate the distance from the desired position to the payload.
+                    _listener = (self.landing_lat1, self.landing_lon1, self.landing_alt1)
+                    _payload = (telemetry['lat'], telemetry['lon'], telemetry['alt'])
+
+                    # Calculate using positon_info function from rotator_utils.py
+                    _info = position_info(_listener, _payload)
+
+                    # self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telemetry['alt'], telemetry['vel_h']))
+
+                    # if (_info['straight_distance'] < self.landing_distance1) and (telemetry['alt'] < self.landing_altitude1) and (telemetry['vel_v'] < 0):
+
+                        IPAddr = self.get_ip_address()
+
+                        msg = 'Sonde lost RX near position 1:\n'
+                        msg += '\n'
+                        msg += 'Callsign:  %s\n' % _id
+                        msg += 'Type:      %s\n' % telemetry['type']
+                        msg += 'Frequency: %s\n' % telemetry['freq']
+                        msg += 'Position:  %.5f,%.5f\n' % (telemetry['lat'], telemetry['lon'])
+                        msg += '\n'
+                        msg += 'Range:     %dm\n' % _info['straight_distance']
+                        msg += 'Altitude:  %dm\n' % round(telemetry['alt'])
+                        msg += '\n'
+                        msg += 'https://aprs.fi/#!call=a/%s\n' % _id
+                        msg += '\n'
+                        msg += 'https://sondehub.org/%s\n' % _id
+
+                        conn = httplib.HTTPSConnection("api.telegram.org:443")
+                        conn.request("POST", "/bot%s/sendMessage" % self.bot_token,
+                            urllib.urlencode({
+                            "chat_id": self.chat_id,
+                            "text": msg,
+                            "disable_web_page_preview": True,
+                            }), {"Content-type": "application/x-www-form-urlencoded"})
+                        conn.getresponse()
+
+                        self.log_info("Telegram Notification sent.")
+                        self.sondes_landing_lost[_id] = {'last_time': time.time()}
+
+            except Exception as e:
+                self.log_error("Error sending Telegram Notification - %s" % str(e))
 
 
 
@@ -249,7 +301,8 @@ if __name__ == "__main__":
         landing_lon1 = 10.01,
         landing_alt1 = 0,
         landing_distance1 = 10000,
-        landing_altitude1 = 5000,        
+        landing_altitude1 = 5000,
+        timeout = 10,
     )
 
     # Wait a second..
@@ -259,6 +312,6 @@ if __name__ == "__main__":
     _telegram_notification.add({'id':'R1234567', 'frame':10, 'lat':-10.0, 'lon':10.0, 'alt':4999, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
 
     # Wait a little bit before shutting down.
-    time.sleep(5)
+    time.sleep(20)
     _telegram_notification.close()
 
