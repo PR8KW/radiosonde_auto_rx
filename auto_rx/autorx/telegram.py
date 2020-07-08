@@ -114,7 +114,7 @@ class TelegramNotification(object):
         if _id not in telegram_telemetry_store:
             telegram_telemetry_store[_id] = {'timestamp':time.time(), 'latest_telem':telemetry}
 
-        telegram_telemetry_store[_id]['latest_telem'] = _telem
+        telegram_telemetry_store[_id]['latest_telem'] = telemetry
         telegram_telemetry_store[_id]['timestamp'] = time.time()
 		
         if _id not in self.sondes:
