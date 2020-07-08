@@ -209,33 +209,33 @@ class TelegramNotification(object):
 
                     # if (_info['straight_distance'] < self.landing_distance1) and (telemetry['alt'] < self.landing_altitude1) and (telemetry['vel_v'] < 0):
 
-                        IPAddr = self.get_ip_address()
+                    IPAddr = self.get_ip_address()
 
-                        msg = 'Sonde lost RX near position 1:\n'
-                        msg += '\n'
-                        msg += 'Callsign:  %s\n' % _id
-                        msg += 'Type:      %s\n' % telemetry['type']
-                        msg += 'Frequency: %s\n' % telemetry['freq']
-                        msg += 'Position:  %.5f,%.5f\n' % (telemetry['lat'], telemetry['lon'])
-                        msg += '\n'
-                        msg += 'Range:     %dm\n' % _info['straight_distance']
-                        msg += 'Altitude:  %dm\n' % round(telemetry['alt'])
-                        msg += '\n'
-                        msg += 'https://aprs.fi/#!call=a/%s\n' % _id
-                        msg += '\n'
-                        msg += 'https://sondehub.org/%s\n' % _id
+                    msg = 'Sonde lost RX near position 1:\n'
+                    msg += '\n'
+                    msg += 'Callsign:  %s\n' % _id
+                    msg += 'Type:      %s\n' % telemetry['type']
+                    msg += 'Frequency: %s\n' % telemetry['freq']
+                    msg += 'Position:  %.5f,%.5f\n' % (telemetry['lat'], telemetry['lon'])
+                    msg += '\n'
+                    msg += 'Range:     %dm\n' % _info['straight_distance']
+                    msg += 'Altitude:  %dm\n' % round(telemetry['alt'])
+                    msg += '\n'
+                    msg += 'https://aprs.fi/#!call=a/%s\n' % _id
+                    msg += '\n'
+                    msg += 'https://sondehub.org/%s\n' % _id
 
-                        conn = httplib.HTTPSConnection("api.telegram.org:443")
-                        conn.request("POST", "/bot%s/sendMessage" % self.bot_token,
-                            urllib.urlencode({
-                            "chat_id": self.chat_id,
-                            "text": msg,
-                            "disable_web_page_preview": True,
-                            }), {"Content-type": "application/x-www-form-urlencoded"})
-                        conn.getresponse()
+                    conn = httplib.HTTPSConnection("api.telegram.org:443")
+                    conn.request("POST", "/bot%s/sendMessage" % self.bot_token,
+                        urllib.urlencode({
+                        "chat_id": self.chat_id,
+                        "text": msg,
+                        "disable_web_page_preview": True,
+                        }), {"Content-type": "application/x-www-form-urlencoded"})
+                    conn.getresponse()
 
-                        self.log_info("Telegram Notification sent.")
-                        self.sondes_landing_lost[_id] = {'last_time': time.time()}
+                    self.log_info("Telegram Notification sent.")
+                    self.sondes_landing_lost[_id] = {'last_time': time.time()}
 
             except Exception as e:
                 self.log_error("Error sending Telegram Notification - %s" % str(e))
