@@ -110,7 +110,7 @@ class TelegramNotification(object):
         """ Process a new telemmetry dict, and send an notification if it is a new sonde. """
         global telegram_telemetry_store
         _id = telemetry['id']
-		_telem = telemetry.copy()
+        _telem = telemetry.copy()
 
         if _id not in telegram_telemetry_store:
             telegram_telemetry_store[_id] = {'timestamp':time.time(), 'latest_telem':_telem}
