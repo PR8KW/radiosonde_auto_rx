@@ -259,7 +259,7 @@ class TelegramNotification(object):
                         conn.getresponse()
 
                         self.log_info("Telegram Rx Lost Notification sent.")
-#                        self.sondes_landing_lost[_id] = {'last_time': time.time()}
+                        self.sondes_landing_lost[_id] = {'last_time': time.time()}
 
                 except Exception as e:
                     self.log_error("Error sending Telegram Rx Lost Notification - %s" % str(e))
