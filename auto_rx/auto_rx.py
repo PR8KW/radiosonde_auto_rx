@@ -625,7 +625,8 @@ def main():
             landing_lon1 = config['telegram_landing_lon1'],
             landing_alt1 = config['telegram_landing_alt1'],
             landing_distance1 = config['telegram_landing_distance1'],
-            landing_altitude1 = config['telegram_landing_altitude1']
+            landing_altitude1 = config['telegram_landing_altitude1'],
+            timeout = config['rx_timeout']
 	)
 
         exporter_objects.append(_telegram_notification)
