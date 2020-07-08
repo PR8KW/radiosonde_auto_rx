@@ -142,7 +142,7 @@ class TelegramNotification(object):
             try:
                 # This is an existing sonde.  Send a single notification if it is falling
                 # and is within the range specified.
-		# self.log_info("geofence:  %.5f,%.5f" % (self.landing_lat1, self.landing_lon1))
+                self.log_info("geofence:  %.5f,%.5f" % (self.landing_lat1, self.landing_lon1))
                 if self.landing_lat1 != 0.0 and self.landing_lon1 != 0.0:
 
                     # Calculate the distance from the desired position to the payload.
@@ -248,8 +248,8 @@ if __name__ == "__main__":
         landing_lat1 = -10.01,
         landing_lon1 = 10.01,
         landing_alt1 = 0,
-        landing_distance1 = 5000,
-        landing_altitude1 = 5000,        
+        landing_distance1 = 20000,
+        landing_altitude1 = 20000,        
     )
 
     # Wait a second..
@@ -259,6 +259,6 @@ if __name__ == "__main__":
     _telegram_notification.add({'id':'R1234567', 'frame':10, 'lat':-10.0, 'lon':10.0, 'alt':4999, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
 
     # Wait a little bit before shutting down.
-    time.sleep(5)
+    time.sleep(20)
     _telegram_notification.close()
 
