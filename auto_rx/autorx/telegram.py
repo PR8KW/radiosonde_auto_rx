@@ -24,7 +24,6 @@ except ImportError:
     from queue import Queue
 
 
-telegram_telemetry_store = {}
 
 class TelegramNotification(object):
     """ Radiosonde Telegram Notification Class.
@@ -52,6 +51,7 @@ class TelegramNotification(object):
         self.sondes = {}
         self.sondes_landing = {}
         self.sondes_landing_lost = {}
+        self.telemetry_store = {}
 
         # Input Queue.
         self.input_queue = Queue()
@@ -108,15 +108,14 @@ class TelegramNotification(object):
 
     def process_telemetry(self, telemetry):
         """ Process a new telemmetry dict, and send an notification if it is a new sonde. """
-        global telegram_telemetry_store
         _id = telemetry['id']
         _telem = telemetry.copy()
 
-        if _id not in telegram_telemetry_store:
-            telegram_telemetry_store[_id] = {'timestamp':time.time(), 'latest_telem':_telem}
+        if _id not in self.telemetry_store:
+            self.telemetry_store[_id] = {'timestamp':time.time(), 'latest_telem':_telem}
 
-        telegram_telemetry_store[_id]['latest_telem'] = _telem
-        telegram_telemetry_store[_id]['timestamp'] = time.time()
+        self.telemetry_store[_id]['latest_telem'] = _telem
+        self.telemetry_store[_id]['timestamp'] = time.time()
 		
         if _id not in self.sondes:
             try:
@@ -203,18 +202,17 @@ class TelegramNotification(object):
 
     def process_lost(self):
         """ Send Last sonde position when rx timeout, if on landing notification. """
-        global telegram_telemetry_store
-		
+        		
         _now = time.time()
-        _telem_ids = list(telegram_telemetry_store.keys())
+        _telem_ids = list(self.telemetry_store.keys())
 
         for _id in _telem_ids:
             if (_id not in self.sondes_landing_lost) and (_id in self.sondes_landing) :
                 try:
                 # This is an existing sonde with falling region notification.  
                 # Send a single notification when rx timeout.
-                    telemetry = telegram_telemetry_store[_id]['latest_telem'].copy()
-                    if (_now - telegram_telemetry_store[_id]['timestamp']) > self.timeout:
+                    telemetry = self.telemetry_store[_id]['latest_telem'].copy()
+                    if (_now - self.telemetry_store[_id]['timestamp']) > self.timeout:
                         # Calculate the distance from the desired position to the payload.
                         _listener = (self.landing_lat1, self.landing_lon1, self.landing_alt1)
                         _payload = (telemetry['lat'], telemetry['lon'], telemetry['alt'])
