@@ -243,7 +243,7 @@ if __name__ == "__main__":
 
     # Start up an telegram notifification object.
     _telegram_notification = TelegramNotification(
-	    bot_token = config['telegram_bot_token'],
+        bot_token = config['telegram_bot_token'],
         chat_id = config['telegram_chat_id'],
         landing_lat1 = -10.01,
         landing_lon1 = 10.01,
@@ -260,5 +260,5 @@ if __name__ == "__main__":
 
     # Wait a little bit before shutting down.
     time.sleep(5)
-    _email_notification.close()
+    _telegram_notification.close()
 
