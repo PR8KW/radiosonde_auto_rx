@@ -221,7 +221,7 @@ class TelegramNotification(object):
                         # Calculate using positon_info function from rotator_utils.py
                         _info = position_info(_listener, _payload)
 
-                        # self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telegram_telemetry_store[_id]['alt'], telegram_telemetry_store[_id]['vel_h']))
+                        self.log_info("Sonde Location.  %dm, %dm, %dkm/h" % (_info['straight_distance'], telegram_telemetry_store[_id]['alt'], telegram_telemetry_store[_id]['vel_h']))
 
                         # if (_info['straight_distance'] < self.landing_distance1) and (telegram_telemetry_store[_id]['alt'] < self.landing_altitude1) and (telegram_telemetry_store[_id]['vel_v'] < 0):
 
