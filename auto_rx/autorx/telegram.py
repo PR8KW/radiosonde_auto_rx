@@ -319,7 +319,7 @@ if __name__ == "__main__":
         landing_alt1 = 0,
         landing_distance1 = 10000,
         landing_altitude1 = 5000,
-        timeout = 10,
+        timeout = 20,
     )
 
     # Wait a second..
