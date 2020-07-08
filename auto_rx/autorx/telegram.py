@@ -93,7 +93,7 @@ class TelegramNotification(object):
                     self.log_error("Error processing telemetry dict - %s" % str(e))
 
             # Send last RX position 
-            self.process_lost()
+            self.process_lost(_telem)
             # Sleep while waiting for some new data.
             time.sleep(0.5)
 
