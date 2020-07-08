@@ -251,6 +251,15 @@ class TelegramNotification(object):
                             }), {"Content-type": "application/x-www-form-urlencoded"})
                         conn.getresponse()
 
+                        conn = httplib.HTTPSConnection("api.telegram.org:443")
+                        conn.request("POST", "/bot%s/sendLocation" % self.bot_token,
+                            urllib.urlencode({
+                            "chat_id": self.chat_id,
+                            "latitude": lat,
+                            "longitude": lon,
+                            }), {"Content-type": "application/x-www-form-urlencoded"})
+                        conn.getresponse()
+
                         self.log_info("Telegram Rx Lost Notification sent.")
                         self.sondes_landing_lost[_id] = {'last_time': time.time()}
 
