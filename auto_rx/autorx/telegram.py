@@ -326,8 +326,15 @@ if __name__ == "__main__":
     time.sleep(1)
 
     # Add in a packet of telemetry, which will cause the email notifier to send an email.
-    _telegram_notification.add({'id':'R1234567', 'frame':10, 'lat':-10.0, 'lon':10.0, 'alt':4999, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
+    _telegram_notification.add({'id':'R1234567', 'frame':10, 'lat':-10.000, 'lon':10.000, 'alt':6000, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
 
+    time.sleep(5)
+
+    _telegram_notification.add({'id':'R1234567', 'frame':20, 'lat':-10.005, 'lon':10.005, 'alt':4999, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
+
+    time.sleep(5)
+
+    _telegram_notification.add({'id':'R1234567', 'frame':30, 'lat':-10.011, 'lon':10.011, 'alt':1000, 'temp':1.0, 'type':'RS41', 'freq':'401.520 MHz', 'freq_float':401.52, 'heading':0.0, 'vel_h':5.1, 'vel_v':-5.0, 'datetime_dt':datetime.datetime.utcnow()})
     # Wait a little bit before shutting down.
     time.sleep(20)
     _telegram_notification.close()
