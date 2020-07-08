@@ -44,7 +44,7 @@ class TelegramNotification(object):
         self.landing_alt1 = landing_alt1
         self.landing_distance1 = landing_distance1
         self.landing_altitude1 = landing_altitude1
-		self.timeout = timeout
+        self.timeout = timeout
         
         # Dictionary to track sonde IDs
         self.sondes = {}
