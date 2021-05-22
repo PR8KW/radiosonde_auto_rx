@@ -52,17 +52,6 @@ def read_auto_rx_config(filename, no_sdr_test=False):
         'email_from': 'sonde@localhost',
         'email_to': None,
         'email_subject': "<type> Sonde launch detected on <freq>: <id>",
-		# Pushover Settings
-		'pushover_enabled' : False,
-        	'pushover_app_token' : None,
-        	'pushover_user_key' : None,
-		# Pushover Landing Settings
-		'pushover_landing_enabled' : False,
-		'pushover_landing_lat1' : 0.0,
-		'pushover_landing_lon1' : 0.0,
-		'pushover_landing_alt1' : 0.0,
-		'pushover_landing_distance1' : 0.0,
-		'pushover_landing_altitude1' : 0.0,
 		# Telegram Settings
 		'telegram_enabled' : False,
         	'telegram_bot_token' : None,
@@ -204,28 +193,6 @@ def read_auto_rx_config(filename, no_sdr_test=False):
 			except:
 				logging.error("Config - Invalid or missing email settings. Disabling.")
 				auto_rx_config['email_enabled'] = False
-
-                # Pushover Settings
-		if config.has_option('pushover', 'pushover_enabled'):
-			try:
-				auto_rx_config['pushover_enabled'] = config.getboolean('pushover', 'pushover_enabled')
-				auto_rx_config['pushover_app_token'] = config.get('pushover', 'pushover_app_token')
-				auto_rx_config['pushover_user_key'] = config.get('pushover', 'pushover_user_key')
-			except:
-				logging.error("Config - Invalid pushover settings. Disabling.")
-				auto_rx_config['pushover_enabled'] = False
-
-		if config.has_option('pushover_landing', 'pushover_landing_enabled'):
-			try:
-				auto_rx_config['pushover_landing_enabled'] = config.getboolean('pushover_landing', 'pushover_landing_enabled')
-				auto_rx_config['pushover_landing_lat1'] = config.getfloat('pushover_landing', 'pushover_landing_lat1')
-				auto_rx_config['pushover_landing_lon1'] = config.getfloat('pushover_landing', 'pushover_landing_lon1')
-				auto_rx_config['pushover_landing_alt1'] = config.getfloat('pushover_landing', 'pushover_landing_alt1')
-				auto_rx_config['pushover_landing_distance1'] = config.getfloat('pushover_landing', 'pushover_landing_distance1')
-				auto_rx_config['pushover_landing_altitude1'] = config.getfloat('pushover_landing', 'pushover_landing_altitude1')
-			except:
-				logging.error("Config - Invalid pushover landing settings. Disabling.")
-				auto_rx_config['pushover_landing_enabled'] = False
 
                 # Telegram Settings
 		if config.has_option('telegram', 'telegram_enabled'):
