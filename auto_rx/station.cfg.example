@@ -265,6 +265,7 @@ to = someone@example.com
 # <id> - Sonde Serial Number (i.e. M1234567)
 subject = <type> Sonde launch detected on <freq>: <id>
 
+
 ##########################
 # TELEGRAM NOTIFICATIONS #
 ##########################
