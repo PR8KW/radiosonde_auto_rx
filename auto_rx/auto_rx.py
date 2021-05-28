@@ -27,6 +27,7 @@ from autorx.scan import SondeScanner
 from autorx.decode import SondeDecoder, VALID_SONDE_TYPES, DRIFTY_SONDE_TYPES
 from autorx.logger import TelemetryLogger
 from autorx.email_notification import EmailNotification
+from autorx.telegram import TelegramNotification
 from autorx.habitat import HabitatUploader
 from autorx.aprs import APRSUploader
 from autorx.ozimux import OziUploader
@@ -801,6 +802,21 @@ def main():
         _logger = TelemetryLogger(log_directory=logging_path)
         exporter_objects.append(_logger)
         exporter_functions.append(_logger.add)
+
+    if config["telegram_enabled"]:
+        _telegram_notification = TelegramNotification(
+            bot_token = config["telegram_bot_token"],
+            chat_id = config["telegram_chat_id"],
+            landing_lat1 = config["telegram_landing_lat1"],
+            landing_lon1 = config["telegram_landing_lon1"],
+            landing_alt1 = config["telegram_landing_alt1"],
+            landing_distance1 = config["telegram_landing_distance1"],
+            landing_altitude1 = config["telegram_landing_altitude1"],
+            timeout = config["rx_timeout"]
+	)
+
+        exporter_objects.append(_telegram_notification)
+        exporter_functions.append(_telegram_notification.add)
 
     if config["email_enabled"]:
 
