@@ -70,6 +70,17 @@ def read_auto_rx_config(filename, no_sdr_test=False):
         "email_from": "sonde@localhost",
         "email_to": None,
         "email_subject": "<type> Sonde launch detected on <freq>: <id>",
+        # Telegram Settings
+        "telegram_enabled" : False,
+        "telegram_bot_token" : None,
+        "telegram_chat_id" : None,
+        # Telegram Landing Settings
+        "telegram_landing_enabled" : False,
+        "telegram_landing_lat1" : 0.0,
+        "telegram_landing_lon1" : 0.0,
+        "telegram_landing_alt1" : 0.0,
+        "telegram_landing_distance1" : 0.0,
+        "telegram_landing_altitude1" : 0.0,
         # SDR Settings
         "sdr_fm": "rtl_fm",
         "sdr_power": "rtl_power",
@@ -219,6 +230,28 @@ def read_auto_rx_config(filename, no_sdr_test=False):
             except:
                 logging.error("Config - Invalid or missing email settings. Disabling.")
                 auto_rx_config["email_enabled"] = False
+
+        # Telegram Settings
+        if config.has_option("telegram", "telegram_enabled"):
+            try:
+                auto_rx_config["telegram_enabled"] = config.getboolean("telegram", "telegram_enabled")
+                auto_rx_config["telegram_bot_token"] = config.get("telegram", "telegram_bot_token")
+                auto_rx_config["telegram_chat_id"] = config.get("telegram", "telegram_chat_id")
+            except:
+                logging.error("Config - Invalid telegram settings. Disabling.")
+                auto_rx_config["telegram_enabled"] = False
+
+        if config.has_option("telegram_landing", "telegram_landing_enabled"):
+            try:
+                auto_rx_config["telegram_landing_enabled"] = config.getboolean("telegram_landing", "telegram_landing_enabled")
+                auto_rx_config["telegram_landing_lat1"] = config.getfloat("telegram_landing", "telegram_landing_lat1")
+                auto_rx_config["telegram_landing_lon1"] = config.getfloat("telegram_landing", "telegram_landing_lon1")
+                auto_rx_config["telegram_landing_alt1"] = config.getfloat("telegram_landing", "telegram_landing_alt1")
+                auto_rx_config["telegram_landing_distance1"] = config.getfloat("telegram_landing", "telegram_landing_distance1")
+                auto_rx_config["telegram_landing_altitude1"] = config.getfloat("telegram_landing", "telegram_landing_altitude1")
+            except:
+                logging.error("Config - Invalid telegram landing settings. Disabling.")
+                auto_rx_config["telegram_landing_enabled"] = False
 
         # SDR Settings
         auto_rx_config["sdr_fm"] = config.get("advanced", "sdr_fm_path")

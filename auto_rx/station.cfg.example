@@ -328,6 +328,27 @@ to = someone@example.com
 subject = <type> Sonde launch detected on <freq>: <id>
 
 
+##########################
+# TELEGRAM NOTIFICATIONS #
+##########################
+# Sends telegram notification to specified chat group when a new Sonde is detected
+# See https://techthoughts.info/how-to-create-a-telegram-bot-and-send-messages-via-api/ for details.
+[telegram]
+telegram_enabled = False
+telegram_bot_token = TELEGRAM_BOT_TOKEN
+telegram_chat_id = TELEGRAM_CHAT_ID
+# Define a location so that a telegram notification is sent when the balloon is descending and
+# is within desired range and altitude of this location.  One location currently.  Additional locs to be added later.
+[telegram_landing]
+telegram_landing_enabled = False
+# The location to watch
+telegram_landing_lat1 = 0.0
+telegram_landing_lon1 = 0.0
+telegram_landing_alt1 = 0.0
+# Only get a notification when the balloon is within this range and this altitude. Distance and altitude in meters.
+telegram_landing_distance1 = 30000
+telegram_landing_altitude1 = 2000
+
 ###################
 # ROTATOR CONTROL #
 ###################
